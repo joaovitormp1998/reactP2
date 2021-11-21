@@ -3,28 +3,26 @@ import Cabecalho from "./Header";
 import './Home.css'
 import Rodape from "./Rodape";
 import slide from "./img/slide.jpg"
-import api from './api';
-
+import CardProduto from "./components/cardProduto/CardProduto";
 
 export default class Home extends Component {
-    
-  state = {
-    filmes: [],
-  }
+    constructor(props){
+        super(props);
+        this.state = {listarProdutos: []};
+    }
 
-  async componentDidMount() {
-    const response = await api.get('star%20wars');
+    onCarregamentoProdutoFalhou(erro) {
+        console.log(erro);
+    }
 
-    this.setState({ filmes: response.data });
-  }
-
-    cliqueBotao = () => {
-        console.log("Clique do botão na home");
+    componentDidMount() {
+        fetch("http://localhost:8080/produto")
+        .then(response => response.json(), this.onCarregamentoProdutoFalhou)
+        .then(json => this.setState({ listarProdutos : json }), this.onCarregamentoProdutoFalhou);
     }
 
     render() {
         var tituloPagina = "Home";
-        const { filmes } = this.state;
 
         return (
             <article>
@@ -55,26 +53,20 @@ export default class Home extends Component {
                             <a href="#item-3" class="control-button">•</a>
                         </div>
                     </div>
-                    </section>
-                <section>
-                <div>
-        <h1>Listar os Filmes</h1>
-        {filmes.map(filme => (
-          <li key={filme.show.id}>
-            <h2>
-              <strong>Título: </strong>
-              {filme.show.name}
-            </h2>
-            <p>
-              {filme.show.url}
-            </p>
+                </section>
+                <section id="produtos">
+                <center><h2 style={{marginTop: 30}}>Produtos</h2></center>
 
-          </li>
-        ))}
-      </div>
-
-                    </section>  
-                <Rodape />
+                <div class="row justify-content-center text-center">
+                {
+                       this.state.listarProdutos.map(function (produto) {
+                        return (<CardProduto produto={produto} />)
+                        })
+                    }
+ 
+                </div>
+            </section>
+                    <Rodape />
             </article>
         );
     }
