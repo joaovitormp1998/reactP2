@@ -6,7 +6,7 @@ import elipse from './img/elipse.png';
 function Cabecalho(props) {
     return (
         <header class="header">
-            <a href="/home"><img src={logo} width="180px" height="40px"  alt='logo'></img></a>
+            <a href="/"><img src={logo} width="180px" height="40px"  alt='logo'></img></a>
             <form>
             <div class ="barradepesquisa" id="barradepesquisa">
             <input type ="text" name="pesquisar" placeholder="O que está procurando ? "></input>
