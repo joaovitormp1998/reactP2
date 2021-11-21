@@ -3,7 +3,20 @@ import Cabecalho from "./Header";
 import './Home.css'
 import Rodape from "./Rodape";
 import slide from "./img/slide.jpg"
+import api from './api';
+
+
 export default class Home extends Component {
+    
+  state = {
+    filmes: [],
+  }
+
+  async componentDidMount() {
+    const response = await api.get('star%20wars');
+
+    this.setState({ filmes: response.data });
+  }
 
     cliqueBotao = () => {
         console.log("Clique do botão na home");
@@ -11,6 +24,8 @@ export default class Home extends Component {
 
     render() {
         var tituloPagina = "Home";
+        const { filmes } = this.state;
+
         return (
             <article>
                 <Cabecalho titulo={tituloPagina} cliqueBotao={this.cliqueBotao} />
@@ -41,7 +56,24 @@ export default class Home extends Component {
                         </div>
                     </div>
                     </section>
-                
+                <section>
+                <div>
+        <h1>Listar os Filmes</h1>
+        {filmes.map(filme => (
+          <li key={filme.show.id}>
+            <h2>
+              <strong>Título: </strong>
+              {filme.show.name}
+            </h2>
+            <p>
+              {filme.show.url}
+            </p>
+
+          </li>
+        ))}
+      </div>
+
+                    </section>  
                 <Rodape />
             </article>
         );
